@@ -1,0 +1,16 @@
+********************
+readOnly
+*******************
+
+Purpose: The readOnly attribute makes an input field non-editable by the user. This means that while the input can still receive focus and its content can be selected and copied, the user cannot modify the value in the field.
+Use Case: readOnly is useful when you want to display data that the user should see but not change, such as a calculated value or a prefilled field that should not be altered.
+Behavior: The value can be copied by the user, and the input can still be included in form submissions.
+
+**************************************************************************************************************************************
+The disabled
+*******************************************************************************************************************************
+
+Purpose: The disabled attribute also makes an input field non-editable, but with additional restrictions compared to readOnly. A disabled input is not interactive: it cannot receive focus, be selected, or be included in form submissions.
+Use Case: disabled is used when the input should not be interactive at all. This can be useful for fields that are conditionally unavailable, such as a submit button that is disabled until a form is fully filled out.
+Behavior: The input appears grayed out, cannot be clicked or focused, and its value is not sent when the form is submitted.
+

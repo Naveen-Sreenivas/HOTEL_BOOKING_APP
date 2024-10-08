@@ -1,0 +1,6 @@
+ const {data:hotel} = useQuery("fetchMyHotelById",()=> apiClient.fetchMyHotelById(hotelId || ""),{
+            enabled: !!hotelId,
+        });
+******************************************************************************************************************************************
+
+the hotel variable is not defining the type of the data. Instead, it is holding the actual data fetched by the useQuery hook. If you want to define the type of the hotel data, you typically do this separately, often using TypeScript interfaces or types.

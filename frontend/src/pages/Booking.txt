@@ -1,0 +1,25 @@
+***********************************************************
+1. search.checkOut.getTime() and search.checkIn.getTime()
+***********************************************************
+
+These methods are called on Date objects representing the check-in and check-out dates. The getTime() method returns the number of milliseconds since the Unix epoch (January 1, 1970) for a given date.
+2. Math.abs(...)
+
+**********************************************************
+The Math.abs() 
+**********************************************************
+
+function returns the absolute value of the number. It's used here to ensure that the result is positive, regardless of the order of the dates (though logically, checkOut should always be after checkIn).
+3. (search.checkOut.getTime() - search.checkIn.getTime())
+This expression calculates the difference in milliseconds between the check-out and check-in dates. The subtraction yields the number of milliseconds between the two times.
+
+*****************************************************
+Math.ceil() 
+*******************************************************
+will always round numbers up to the next whole number, regardless of the fractional part.
+
+******************************************************
+Math.round() 
+*******************************************************
+
+will round numbers up or down to the nearest whole number, depending on whether the fractional part is 0.5 or greater (round up) or less than 0.5 (round down).

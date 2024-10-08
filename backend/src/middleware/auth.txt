@@ -1,0 +1,35 @@
+
+const token = req.cookies["auth_token"];
+
+
+The cookie-parser module in Node.js is a middleware for parsing cookies attached to the client request object. Cookies are small pieces of data stored on the client side and are typically used for session management, user tracking, and personalization.
+
+
+
+const decoded = jwt.verify(token,process.env.JWT_SECRET_KEY as string);
+
+
+
+Receive the Token: The server receives the JWT from the client (usually sent in the Authorization header).
+
+Extract and Decode: The server extracts the token from the request and decodes it to separate the header, payload, and signature.
+
+Recreate the Signature:
+
+Using the secret key and the header and payload from the token, the server recreates the signature.
+Compare Signatures:
+
+The server compares the recreated signature with the signature in the received token.
+If they match, it means the token is valid and has not been tampered with.
+Check Expiration: The server checks the expiration time in the token to ensure it hasn't expired.
+
+Extract User Data: If the token is valid and not expired, the server extracts the user data (like userId) from the token's payload and uses it to identify the user making the request.
+
+
+
+    req.userId = (decoded as JwtPayload ).userId;
+
+
+When you decode the JWT, it returns an object that contains the data (payload) you encoded when you created the token. This object usually includes user-specific information such as the userId.
+
+as JwtPayload part is specific to TypeScript and is used for type assertion. It tells TypeScript to treat the decoded value as a JwtPayload type. 

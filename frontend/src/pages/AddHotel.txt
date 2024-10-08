@@ -1,0 +1,15 @@
+******************************************************************************************************************************************
+<ManageHotelForm onSave={handleSave}/>
+******************************************************************************************************************************************
+onSubmit is typically used at the <form> level to handle the entire form submission process.
+onSave (or similar custom functions) are often used within form components (ManageHotelForm in your case) to handle specific actions related to data processing, validation, and submission.
+
+
+ In JavaScript, FormData is not just a type or a description but an actual object that stores key-value pairs representing form fields and their values
+
+ Data Flow: When you define handleSave, you're setting it up to receive an argument (hotelFormData). The actual value of hotelFormData comes from formData when handleSave is invoked by events like onSave followed by onSubmit.
+
+******************************************************************************************************************************************
+ isLoading
+ *****************************************************************************************************************************************
+ isLoading: This property is true when the mutation is currently being executed. This means that the mutation function (mutate) has been called and the request is still in progress. It will be false when the mutation is not in progress, i.e., before it starts or after it completes (either successfully or with an error).

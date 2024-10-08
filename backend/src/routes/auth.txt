@@ -1,0 +1,21 @@
+expiresIn in JWT: Defines how long the token itself is valid, after which it cannot be used for authentication.
+maxAge in Cookies: Defines how long the browser should retain the cookie, after which it will be removed from the client's storage.
+******************************************************************************************************************************************
+
+******************************************************************************************************************************************
+router.post("/logout", (req: Request, res: Response) => {
+    res.cookie("auth_token", "", {
+        expires: new Date(0),
+    });
+    res.send();
+});
+******************************************************************************************************************************************
+Setting Cookie:
+
+res.cookie("auth_token", "", { expires: new Date(0) }): This line clears the auth_token cookie by setting its value to an empty string ("") and setting its expiration date to a past date (new Date(0)). This effectively deletes the cookie on the client side.
+res.send():
+
+res.send(): This function sends an empty response to the client.
+Role: In this context, res.send() is used to complete the HTTP response. After clearing the auth_token cookie, the server responds to the client's logout request with an empty body (res.send() sends a 200 OK response with no content).
+
+Completion of the Request-Response Cycle: Every HTTP request expects a response. res.send() completes the request-response cycle initiated by the client's POST request to /logout.

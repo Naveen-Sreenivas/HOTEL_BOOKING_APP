@@ -1,0 +1,87 @@
+We are creating a new QueryClient with special instructions:
+
+defaultOptions: These are the default rules for all our data fetching.
+queries: This part specifically sets rules for fetching data.
+retry: 0: This rule says, "If fetching data fails, don't try again automatically."
+Why It's Useful
+Central Control: Instead of writing data-fetching logic in many places, the QueryClient manages it all in one place.
+Automatic Updates: It keeps data fresh and updates it when needed.
+Error Handling: It can automatically handle errors and retries, but we disabled retries with retry: 0.
+Putting It All Together
+Create the QueryClient: We create an instance that will manage our data fetching.
+Configure It: We set up some default rules for how data should be fetched and handled.
+Use It in Our App: We provide this instance to our whole app, so any component can use it to fetch data.
+Simple Analogy
+Imagine the QueryClient as a smart assistant in a library:
+
+Managing Books (Data): The assistant knows where every book is and who borrowed them.
+Automatic Updates (Synchronization): The assistant checks if new books arrive or if borrowed books are returned.
+Rules (Configuration): We can tell the assistant, "Don't try to get a book again if it's not available" (retry: 0).
+By creating and configuring the QueryClient, we make sure our app has a smart assistant to manage all the data fetching and storing efficiently.
+
+Queries and Mutations
+Queries: These are used to fetch data from a server (like getting a list of users).
+Mutations: These are used to modify data on a server (like adding a new user).
+Default Options
+When we create a QueryClient, we can specify default options for both queries and mutations. This means we can set some rules or behaviors that will apply to all queries and mutations in our app unless we override them individually.
+
+Here's how we can specify default options:
+
+javascript
+Copy code
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 0,
+      refetchOnWindowFocus: false,
+      staleTime: 1000 * 60 * 5, // 5 minutes
+    },
+    mutations: {
+      retry: 2,
+      onError: (error) => {
+        console.error("A mutation error occurred: ", error);
+      }
+    }
+  }
+});
+Breakdown of Default Options
+For Queries
+retry: Specifies how many times to retry fetching data if it fails.
+
+retry: 0: Don't retry fetching if it fails.
+retry: 2: Retry fetching up to 2 times if it fails.
+refetchOnWindowFocus: Determines if the query should refetch data when the window regains focus.
+
+refetchOnWindowFocus: false: Do not refetch data when the window is focused again.
+staleTime: The amount of time (in milliseconds) after data is considered stale and needs to be refetched.
+
+staleTime: 1000 * 60 * 5: Data is fresh for 5 minutes (300,000 milliseconds).
+For Mutations
+retry: Specifies how many times to retry the mutation if it fails.
+
+retry: 2: Retry the mutation up to 2 times if it fails.
+onError: A callback function to handle errors that occur during the mutation.
+
+onError: (error) => { console.error("A mutation error occurred: ", error); }: Log the error to the console.
+Why Use Default Options?
+Consistency: Ensures consistent behavior across all queries and mutations.
+Simplicity: Reduces the need to specify options repeatedly in every individual query or mutation.
+Customization: Allows you to tailor the default behavior of react-query to fit your app's needs.
+Example in Practice
+When we create a QueryClient with these default options:
+
+Every query will not retry on failure (retry: 0).
+Every query will not refetch data when the window is focused (refetchOnWindowFocus: false).
+Every query will consider data fresh for 5 minutes (staleTime: 1000 * 60 * 5).
+Every mutation will retry up to 2 times if it fails (retry: 2).
+Every mutation will log errors to the console (onError callback).
+How It Works
+Initialization: When the QueryClient is created, it sets these default options.
+Usage: Whenever a query or mutation is used in the app, these defaults are applied unless overridden.
+Override: Individual queries or mutations can still specify their own options if different behavior is needed.
+By specifying default options, we streamline the setup of queries and mutations, ensuring our app behaves consistently and reducing repetitive code.
+
+
+
+
+

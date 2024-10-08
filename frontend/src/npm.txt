@@ -1,0 +1,21 @@
+***************************************************************************************************************************************
+The command npm i --save @stripe/react-stripe-js @stripe/stripe-js 
+****************************************************************************************************************************************
+
+is used to install two packages from the npm (Node Package Manager) registry and save them as dependencies in your project. Here's a breakdown:
+
+npm i: This is short for npm install, which installs the specified packages.
+
+--save: This flag is used to add the installed packages to the dependencies section of your package.json file. It ensures that the packages are listed as required dependencies for your project.
+
+@stripe/react-stripe-js: This package provides a set of React components and hooks for integrating Stripe's payment processing features into a React application. It allows you to create payment forms and handle the payment process using the Stripe.js library in a way that is idiomatic to React.
+
+@stripe/stripe-js: This is the official JavaScript library for Stripe, providing a low-level interface for integrating Stripe's APIs into your application. It includes methods for creating and managing payments, customers, and other Stripe entities.
+
+Together, these packages enable you to use Stripe's payment processing capabilities within a React application, leveraging React-specific tools and patterns. For example, you can use Elements from @stripe/react-stripe-js to set up the context for your Stripe components, and useStripe and useElements hooks to manage the payment form state and handle payment methods.
+
+
+
+
+
+

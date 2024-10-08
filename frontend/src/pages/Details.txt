@@ -1,0 +1,8 @@
+white-space: pre-line Means
+Key Features
+Collapses Extra Spaces:
+Definition: Consecutive whitespace characters (spaces, tabs) are collapsed into a single space.
+Example: If your input text has multiple spaces or tab characters, they will be rendered as just one space in the output.
+Preserves Line Breaks:
+Definition: Line breaks created by pressing the Enter key (or newline characters) are preserved.
+Example: If you have a line of text followed by a newline, that text will start on a new line in the output.

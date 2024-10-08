@@ -1,0 +1,201 @@
+const storage = multer.memoryStorage();
+
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 5 * 1024 * 1024 // 5MB
+    }
+});
+******************************************************************************************************************************************
+const storage = multer.memoryStorage();
+
+multer.memoryStorage(): Multer provides different storage engines to handle file uploads. multer.memoryStorage() is one such engine that stores the files in memory as Buffer objects{Buffers are used to handle binary data, such as images, videos, or any file contents, in a format that Node.js can manipulate directly.}. This means that the uploaded files are kept in memory (RAM) instead of being written to disk. It's useful for handling files temporarily and is typically used when you need to process the file data in-memory or when you don't want to store files permanently on the server.
+const upload = multer({ ... });
+
+multer({ ... }): Initializes Multer middleware with configuration options.
+storage: storage
+
+storage: This specifies the storage engine to use for handling file uploads. In this case, it's set to multer.memoryStorage(), indicating that files will be stored in memory.
+limits: { fileSize: 5 * 1024 * 1024 }
+
+limits: An optional configuration object within Multer that specifies limits and constraints for file uploads.
+fileSize: 5 * 1024 * 1024: Specifies the maximum size (in bytes) allowed for each uploaded file. In this example, it's set to 5 megabytes (5 * 1024 * 1024 bytes), which equals approximately 5 MB.
+
+
+******************************************************************************************************************************************
+upload.array("imageFiles",6)
+******************************************************************************************************************************************
+
+upload: This refers to an instance of the Multer middleware configured in your Node.js application. Multer is a middleware for handling multipart/form-data, which is commonly used for file uploads in web applications.
+
+.array(): This method is a function provided by Multer that specifies how to handle multiple files uploaded via a form field. It expects:
+
+The name of the form field ("imageFiles" in this case), which indicates the name attribute used in the HTML form input.
+The maximum number of files (6 in this case) that can be uploaded simultaneously under this form field. If more files are uploaded, Multer will throw an error.
+"imageFiles": This is the name of the form field where the files will be uploaded from the client side. In HTML forms, it would typically be something like <input type="file" name="imageFiles" multiple>.
+
+6: This number specifies the maximum number of files that can be uploaded simultaneously under the "imageFiles" form field. If the client tries to upload more than 6 files, Multer will respond with an error.
+
+******************************************************************************************************************************************
+const imageFiles = req.files as Express.Multer.File[];
+******************************************************************************************************************************************
+req represents the request object in Express.js.
+req.files refers to the files that were uploaded and parsed by the Multer middleware. When using Multer, req.files contains an array of files uploaded via form fields that were configured with Multer.
+as Express.Multer.File[]:
+
+This is a type assertion in TypeScript (as keyword) that tells TypeScript to treat req.files as an array ([]) of objects (Express.Multer.File) that adhere to the File interface defined by Multer.
+Express.Multer.File is a type defined by Multer for representing uploaded files. It includes properties such as fieldname, originalname, encoding, mimetype, size, and buffer (if using memory storage).
+
+******************************************************************************************************************************************
+const b64 = Buffer.from(image.buffer).toString("base64");
+******************************************************************************************************************************************
+Explanation:
+Buffer.from(image.buffer):
+
+Buffer: This is a global object in Node.js that is used to work with binary data directly.
+.from(): This method creates a new Buffer containing the data from the provided argument. In this case, the argument is image.buffer.
+image.buffer: This represents the raw binary data of an image. If you used Multer with memory storage, the uploaded file's data is stored in buffer.
+.toString("base64"):
+
+.toString(): This method converts the Buffer data to a string.
+"base64": This argument specifies the encoding format for the conversion. Base64 is an encoding scheme that represents binary data in an ASCII string format. It is often used to encode binary data for transmission over text-based protocols like HTTP.
+const b64:
+
+const: This keyword declares a constant variable, meaning its value cannot be reassigned after it is set.
+b64: This is the name of the variable that will store the Base64-encoded string.
+Putting It All Together:
+Buffer.from(image.buffer):
+
+Converts the binary data (image.buffer) of the image into a Buffer object.
+.toString("base64"):
+
+Converts the Buffer object into a Base64-encoded string.
+const b64:
+
+Declares a constant variable named b64 to store the resulting Base64-encoded string.
+
+
+******************************************************************************************************************************************
+let dataURI = "data:" + image.mimetype + ";base64," + b64;
+******************************************************************************************************************************************
+Explanation in Simple English:
+let dataURI:
+
+This declares a variable named dataURI that will hold the final result.
+"data:":
+
+This is a string that starts the Data URI. It indicates that the content following it is data.
++ image.mimetype +:
+
+image.mimetype is the MIME type of the image (e.g., image/png, image/jpeg). The + operator is used to concatenate this MIME type to the initial string "data:".
+";base64,":
+
+This string indicates that the data following it is Base64 encoded. It's a necessary part of the Data URI format.
++ b64:
+
+b64 is the variable that holds the Base64-encoded string of the image's binary data. The + operator concatenates this encoded string to the existing string.
+
+******************************************************************************************************************************************
+const uploadPromises  = imageFiles.map(async(image)=>{
+    const b64 = Buffer.from(image.buffer).toString("base64"); 
+    let dataURI = "data:" + image.mimetype + ";base64," + b64;
+    const res = await cloudinary.v2.uploader.upload(dataURI);
+    return res.url;
+})
+*****************************************************************************************************************************************
+
+
+ When using map with an async function, the map method iterates over each element in the array and calls the async function for each element. These async functions are all initiated almost simultaneously, meaning they run concurrently. The operations inside each async function are sequential, but the async functions themselves are running concurrently.
+
+
+******************************************************************************************************************************************
+Hotel.findOneAndUpdate(filter, update, options)
+******************************************************************************************************************************************
+
+await Hotel.findOneAndUpdate(filter, update, options): Asynchronously finds a single document that matches the filter, updates it, and returns the updated document.
+filter: { _id: req.params.hotelId, userId: req.userId }
+_id: req.params.hotelId: Matches the document with the specified hotel ID.
+userId: req.userId: Matches the document with the specified user ID to ensure the user is authorized to update this hotel.
+update: updatedHotel
+The object containing the fields to update in the document.
+options: { new: true, runValidators: true }
+new: true: Returns the updated document.
+runValidators: true: Ensures the update operation respects the schema validations.
+
+******************************************************************************************************************************************
+router.put("/:hotelId",verifyToken,upload.array("imageFiles"),async(req:Request,res:Response)=>{
+    try{
+    const updatedHotel:HotelType = req.body;
+
+    updatedHotel.lastUpdate = new Date();
+    
+    const hotel = await Hotel.findOneAndUpdate({
+        _id:req.params.hotelId,
+        userId:req.userId
+    },updatedHotel,{
+        new:true
+    }
+    )
+    
+    
+    if(!hotel){
+        return res.status(404).json({message:"Hotel not found"});
+    }
+    
+    const files = req.files as Express.Multer.File[];
+    
+    const updatedImagesUrls = await uploadImages(files);
+    
+    hotel.imageUrls = [...updatedImagesUrls,...(updatedHotel.imageUrls || []) ];
+    
+    await hotel.save();
+    }
+    catch(error){
+        res.status(500).json({message:"Something went wrong"});
+    }
+    })
+    
+    async function uploadImages(imageFiles: Express.Multer.File[]) {
+        const uploadPromises = imageFiles.map(async (image) => {
+            const b64 = Buffer.from(image.buffer).toString("base64");
+            let dataURI = "data:" + image.mimetype + ";base64," + b64;
+            const res = await cloudinary.v2.uploader.upload(dataURI);
+            return res.url;
+        });
+        const imageUrls = await Promise.all(uploadPromises);
+        return imageUrls;
+    }
+  ***************************************************************************************************************************************  
+
+
+
+Verify Token:
+
+Ensure the user is authenticated by verifying the token. This would typically be handled by middleware.
+Accept Images via Multer:
+
+Use Multer to handle file uploads, ensuring they meet specified conditions (e.g., file size limit).
+Extract Data from Request Body:
+
+Extract data from req.body and define its type as HotelType.
+Update lastUpdate Field:
+
+Set the lastUpdate field to the current date and time.
+Find and Update Hotel Document:
+
+Use the Hotel model to find a document by _id and userId, and update it with the new data.
+Handle Not Found Error:
+
+If no document is found, respond with a 404 status and an error message.
+Extract Uploaded Files:
+
+Extract the new files from req.files.
+Upload Images to Cloudinary:
+
+Convert the files to binary, upload them to Cloudinary, and obtain their URLs.
+Update Image URLs:
+
+Update the hotel object with the new image URLs, combining them with any existing URLs.
+Save Updated Document:
+
+Save the updated hotel document back to the database.

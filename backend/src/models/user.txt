@@ -1,0 +1,105 @@
+1.  new mongoose.Schema({})
+In Mongoose, new mongoose.Schema({}) is used to define a schema for MongoDB documents. Let's break down what this syntax means and how it is used:
+
+new mongoose.Schema({}) Syntax
+Creating a Schema Instance:
+
+mongoose.Schema is a constructor function provided by the Mongoose library. When you call new mongoose.Schema({}), you are creating a new instance of a schema.
+Schema Definition:
+
+Inside the {} (curly braces), you define the structure of your MongoDB documents. This includes specifying the fields (properties) that each document will have and their respective types and validation rules.
+
+
+mongoose:
+
+mongoose is an instance of the Mongoose library, which is required at the beginning of the file (const mongoose = require('mongoose');).
+.model():
+
+
+2.  const User = mongoose.model('User', userSchema);
+
+
+.model() is a method provided by Mongoose that is used to create a model for a MongoDB collection. It takes two parameters:
+
+First Parameter ('User'):
+
+This is a string that specifies the singular name of the model. Mongoose will use this name to automatically determine the name of the MongoDB collection. By convention, Mongoose will convert this name to lowercase and pluralize it to determine the collection name. For example, 'User' will correspond to the 'users' collection in MongoDB.
+
+Second Parameter (userSchema):
+
+userSchema is an instance of mongoose.Schema that defines the structure (schema) of the documents that will be stored in the MongoDB collection. It specifies the fields (properties) of the documents and their respective types and validation rules.
+
+
+Schema Definition:
+
+Schema in Mongoose defines the blueprint or structure of documents that will be stored in a MongoDB collection. It specifies:
+Fields (and their types)
+Validation rules
+Default values
+Middleware hooks (pre-save, post-save, etc.)
+Instance methods (methods that operate on individual documents)
+Model Compilation:
+
+Model is created by compiling a schema using mongoose.model(). This method takes two arguments:
+A singular name for the model (which corresponds to the MongoDB collection name, typically in singular form)
+The schema object that defines the structure and behavior of the documents in that collection
+Interface to MongoDB:
+
+Once a model is created, it acts as an interface to MongoDB collections. Models provide methods for performing CRUD (Create, Read, Update, Delete) operations on documents within the associated MongoDB collection.
+Methods like find, findOne, save, update, delete, etc., are accessible through the model. These methods leverage the schema definition to enforce validation rules, handle middleware hooks, and maintain data consistency.
+
+
+
+
+3. 
+middleware functions are hooks that allow you to run code at specific points in the lifecycle of a document. The .pre() function is used to define middleware that runs before a certain operation, such as saving a document to the database.
+
+Breakdown of the Syntax
+javascript
+Copy code
+userSchema.pre("save", async function(next) {
+    if (this.isModified('password')) {
+        this.password = await bcrypt.hash(this.password, 8);
+    }
+    next();
+});
+3.1 userSchema.pre("save", async function(next) {...})
+userSchema: Refers to the schema definition for the User model.
+.pre("save", ...): Specifies that this is a pre-save middleware hook. It runs before the document is saved to the database.
+"save": The event that triggers the middleware. You can replace "save" with other events like "updateOne", "findOneAndUpdate", etc.
+
+3.2. async function(next) {...}
+async function(next): Defines an asynchronous function that takes next as an argument. next is a callback function that you call to pass control to the next middleware in the stack.
+
+3.3 Middleware Logic
+javascript
+Copy code
+if (this.isModified('password')) {
+    this.password = await bcrypt.hash(this.password, 8);
+}
+if (this.isModified('password')): Checks if the password field has been modified.
+
+this: Refers to the current document instance being saved.
+isModified('password'): A Mongoose method that returns true if the password field has been modified since the document was last saved.
+this.password = await bcrypt.hash(this.password, 8): Hashes the password if it has been modified.
+
+bcrypt.hash(this.password, 8): Asynchronously hashes the password using bcrypt with a salt round of 8. await is used to wait for the hashing operation to complete before proceeding.
+3.4. next()
+next(): Calls the next middleware function in the stack. It is crucial to call next() to ensure the save operation continues. If you forget to call next(), the save operation will hang indefinitely.
+
+
+
+
+
+
+4.
+
+<UserType>
+
+
+ Type Assertion in TypeScript
+In TypeScript, type assertions are used to tell the compiler to treat a value as a specific type. This is particularly useful when you know more about a value's type than TypeScript does, such as when working with third-party libraries or APIs that may not provide detailed type information.
+
+
+
+ 

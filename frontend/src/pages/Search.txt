@@ -1,0 +1,17 @@
+useQuery Hook:
+
+useQuery is a hook provided by react-query for fetching data asynchronously. It manages the fetching, caching, and updating of the data.
+Query Key:
+
+["searchHotels", searchParams] is the query key. It uniquely identifies this query within the react-query cache.
+The query key is an array where the first element ("searchHotels") is a static key indicating the type of data being fetched.
+The second element (searchParams) is a variable representing the parameters used for searching hotels. By including searchParams in the query key, react-query can differentiate between different sets of search parameters and manage the cache accordingly.
+Query Function:
+
+() => apiClient.searchHotels(searchParams) is the query function. This is an asynchronous function that fetches the data. In this case, it calls apiClient.searchHotels with the searchParams.
+apiClient.searchHotels is presumably a function that sends an HTTP request to an API endpoint to retrieve a list of hotels based on the search parameters.
+Destructuring the Result:
+
+The useQuery hook returns an object with several properties, including data, error, isLoading, and more.
+const { data: hotelData } uses destructuring to extract the data property from the result of useQuery and renames it to hotelData.
+hotelData will hold the data fetched by the query, which, in this context, is expected to be the hotel search results.

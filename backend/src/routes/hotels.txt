@@ -1,0 +1,238 @@
+***********************************************************
+new Stripe(process.env.STRIPE_API_KEY as string);
+************************************************************
+new Keyword: This is used to create an instance of a class. When used, it calls the constructor of the class to initialize the new object.
+
+Stripe: This represents the class provided by the Stripe library. This class contains methods and properties for interacting with Stripe's API.
+
+process.env.STRIPE_API_KEY as string: This is an expression that accesses the STRIPE_API_KEY environment variable from process.env and asserts that it is of type string. The as string part is a TypeScript type assertion, ensuring that the value is treated as a string.
+******************************************************************************************************************************************
+const pageNumber = parseInt(
+            req.query.page ? req.query.page.toString() : "1"
+        );
+******************************************************************************************************************************************
+
+A query parameter is a key-value pair that appears at the end of a URL, typically used to pass information to a web server. Query parameters are appended to the URL after a question mark (?), with multiple parameters separated by ampersands (&).
+
+For example, in the URL http://example.com/search?query=hotels&page=2, query and page are query parameters.
+
+Here's a breakdown of the URL:
+
+http://example.com/search: The base URL.
+?query=hotels&page=2: The query string.
+query=hotels: A query parameter where the key is query and the value is hotels.
+page=2: A query parameter where the key is page and the value is 2
+
+        Why Use toString():
+Ensuring Type Consistency: In some frameworks or environments, the query parameter could potentially be an object or another type due to various middleware or preprocessing steps. Using toString() ensures that whatever the type of req.query.page, it gets converted to a string safely.
+
+*****************************************************************************************************************************************
+const hotels =await Hotel.find().skip(skip).limit(pageSize);
+******************************************************************************************************************************************
+skip(n):
+
+The skip function is used to skip the first n documents in the result set. It effectively tells the database to start returning results from the n+1th document onward.
+For example, if you have a collection of 100 documents and you use skip(10), the first 10 documents will be skipped, and the query will return documents starting from the 11th one.
+limit(n):
+
+The limit function is used to specify the maximum number of documents to return in the result set. It limits the number of documents to n.
+For instance, if you set limit(10), the query will return at most 10 documents.
+
+Hotel.countDocuments() is a good approach to count the total number of documents in the collection.
+
+******************************************************************************************************************************************
+
+
+******************************************************************************************************************************************
+EXAMPLE  const queryParams = {
+    destination: "Paris",
+    adultCount: "2",
+    childCount: "1",
+    facilities: ["WiFi", "Pool"],
+    types: "Hotel",
+    stars: ["3", "4"],
+    maxPrice: "150"
+};
+this data is used to create the object.
+*****************************************************************************************************************************************
+const constructedQuery = {
+    $or: [
+        { city: new RegExp("Paris", "i") },
+        { country: new RegExp("Paris", "i") }
+    ],
+    adultCount: {
+        $gte: 2
+    },
+    childCount: {
+        $gte: 1
+    },
+    facilities: {
+        $all: ["WiFi", "Pool"]
+    },
+    type: {
+        $in: ["Hotel"]
+    },
+    starRating: {
+        $in: [3, 4]
+    },
+    pricePerNight: {
+        $lte: "150"
+    }
+};
+******************************************************************************************************************************************
+Breakdown of the Syntax
+javascript
+if (queryParams.destination) {
+    constructedQuery.$or = [
+        {
+            city: new RegExp(queryParams.destination, "i")
+        },
+        {
+            country: new RegExp(queryParams.destination, "i")
+        }
+    ];
+}
+*****************************************************************************************************************************************
+*****************************************************************************************************************************************
+if (queryParams.adultCount) {
+        constructedQuery.adultCount = {
+          $gte: parseInt(queryParams.adultCount),
+        };
+      }
+*****************************************************************************************************************************************
+Explanation
+Condition Check:
+if (queryParams.destination): This checks whether queryParams.destination is truthy (i.e., it has a value). If it is null, undefined, or an empty string, the condition will evaluate to false, and the code block will not execute.
+Creating the $or Array:
+If queryParams.destination has a value, the code creates a property called $or on the constructedQuery object.
+
+
+The $or operator in MongoDB is used to perform a logical OR operation on an array of two or more expressions.
+
+
+The value of $or is an array containing two objects.
+Objects in the Array:
+The first object in the array checks if the city field matches the destination using a regular expression:
+javascript
+{ city: new RegExp(queryParams.destination, "i") }
+
+new RegExp(queryParams.destination, "i") creates a case-insensitive regular expression based on the value of queryParams.destination.
+The second object checks if the country field matches the same destination:
+javascript
+{ country: new RegExp(queryParams.destination, "i") }
+
+Purpose
+The purpose of this structure is to allow for a flexible search that will match either the city or country fields in the database against the provided destination. This is particularly useful for applications where users might search for a location by name, and you want to ensure that both cities and countries are considered in the search results.
+Example
+If queryParams.destination is "Paris", the resulting constructedQuery would include:
+javascript
+constructedQuery.$or = [
+    { city: new RegExp("Paris", "i") },
+    { country: new RegExp("Paris", "i") }
+];
+
+This means that the query will return documents where either the city is "Paris" or the country is "Paris", regardless of case sensitivity.
+
+javascript
+constructedQuery.adultCount = {
+  $gte: parseInt(queryParams.adultCount),
+};
+
+constructedQuery.adultCount: This line is assigning a new property adultCount to the constructedQuery object.
+$gte: This is a MongoDB operator that stands for "greater than or equal to". It is used to specify that the value of adultCount should be greater than or equal to the value provided.
+parseInt(queryParams.adultCount): This function converts the adultCount value from queryParams (which is likely a string) into an integer. This is important because query parameters from URLs are typically strings, and you want to ensure that you're comparing numbers in the query.
+
+*****************************************************************************************************************************************
+javascript
+constructedQuery.facilities = {
+  $all: Array.isArray(queryParams.facilities)
+    ? queryParams.facilities
+    : [queryParams.facilities],
+};
+******************************************************************************************************************************************
+
+
+constructedQuery.facilities: This line assigns a new property facilities to the constructedQuery object.
+$all: This is a MongoDB operator that matches documents that contain all elements specified in an array. In this case, it will ensure that the resulting documents have all the specified facilities.
+Array.isArray(queryParams.facilities): This function checks if queryParams.facilities is an array. It's a way to determine the type of the input.
+Ternary Operator:
+If true: If queryParams.facilities is already an array, it uses that array directly.
+If false: If queryParams.facilities is not an array (for example, it could be a single string), it wraps it in an array using [queryParams.facilities]. This ensures that the query works correctly regardless of whether the user provided a single facility or multiple facilities.
+
+******************************************************************************************************************************************
+constructedQuery.type = {
+  $in: Array.isArray(queryParams.types)
+    ? queryParams.types
+    : [queryParams.types],
+};
+******************************************************************************************************************************************
+
+constructedQuery.type: This line assigns a new property type to the constructedQuery object.
+$in: This is a MongoDB operator that matches documents where the value of a field equals any value in the specified array. In this case, it will filter results to include documents that match any of the specified types.
+Array.isArray(queryParams.types): This function checks if queryParams.types is an array. This is important for determining how to handle the input.
+Ternary Operator:
+If true: If queryParams.types is already an array, it uses that array directly.
+If false: If queryParams.types is not an array (for instance, it could be a single string), it wraps it in an array using [queryParams.types]. This ensures that the query works correctly regardless of whether the user provided a single type or multiple types.
+Overall Functionality
+******************************************************************************************************************************************
+ if (queryParams.stars) {
+        const starRatings = Array.isArray(queryParams.stars)
+          ? queryParams.stars.map((star: string) => parseInt(star))
+          : parseInt(queryParams.stars);
+    
+        constructedQuery.starRating = { $in: starRatings };
+      }
+*****************************************************************************************************************************************    
+Conditional Statement
+javascript
+if (queryParams.stars) {}
+
+Purpose: This line checks if the stars property exists and is truthy in the queryParams object. If stars is undefined, null, or any falsy value, the code block will not execute.
+2. Processing Star Ratings
+javascript
+const starRatings = Array.isArray(queryParams.stars)
+  ? queryParams.stars.map((star: string) => parseInt(star))
+  : parseInt(queryParams.stars);
+
+starRatings: This constant is used to store the processed star ratings.
+Array.isArray(queryParams.stars): This function checks if queryParams.stars is an array. This is crucial for determining how to handle the input.
+Ternary Operator:
+If true: If queryParams.stars is an array, the code uses the map() method to iterate over each element in the array, converting each star rating from a string to an integer using parseInt(star).
+If false: If queryParams.stars is not an array (for example, it could be a single string), it directly converts that single value to an integer using parseInt(queryParams.stars).
+3. Constructing the Query
+javascript
+constructedQuery.starRating = { $in: starRatings };
+
+constructedQuery.starRating: This line assigns a new property starRating to the constructedQuery object.
+$in: This is a MongoDB operator that matches documents where the value of a field equals any value in the specified array. In this case, it will filter results to include documents that have a starRating matching any of the values in the starRatings array.
+Overall Functionality
+Purpose: The entire code snippet is designed to dynamically build a query that filters results based on the specified star ratings. If a user specifies one or more star ratings, the code constructs a query that returns only those documents that match any of the specified star ratings.
+Example Scenario
+Imagine a user is searching for hotels and wants to filter by star ratings. If they specify stars=["3", "4"], the constructed query will ensure that only hotels with a star rating of 3 or 4 are returned. If they specify stars="5", the query will still work, treating it as if the user requested an array with a single element.
+
+*****************************************************************************************************************************************
+if (queryParams.maxPrice) {
+        constructedQuery.pricePerNight = {
+          $lte: parseInt(queryParams.maxPrice).toString(),
+        };
+      }
+*****************************************************************************************************************************************
+1. Conditional Statement
+javascript
+if (queryParams.maxPrice) {}
+
+Purpose: This line checks if the maxPrice property exists and is truthy in the queryParams object. If maxPrice is undefined, null, or any falsy value (like 0 or an empty string), the code block will not execute.
+2. Constructing the Query
+javascript
+constructedQuery.pricePerNight = {
+  $lte: parseInt(queryParams.maxPrice).toString(),
+};
+
+constructedQuery.pricePerNight: This line assigns a new property pricePerNight to the constructedQuery object.
+$lte: This is a MongoDB operator that stands for "less than or equal to." It is used to specify that the value of pricePerNight should be less than or equal to the specified maximum price.
+parseInt(queryParams.maxPrice): This function converts the maxPrice value from queryParams (which is typically a string from user input) into an integer. This ensures that the comparison is made between numbers.
+.toString(): After converting maxPrice to an integer, this method converts it back to a string. This is somewhat unusual in the context of a numeric comparison, as MongoDB typically expects numerical values for such comparisons. Therefore, using .toString() here might lead to unexpected behavior, as it would compare the price as a string rather than a number.
+Overall Functionality
+Purpose: The entire code snippet is designed to dynamically build a query that filters results based on the specified maximum price. If a user specifies a maxPrice, the code constructs a query that returns only those documents where the pricePerNight is less than or equal to that maximum price.
+Example Scenario
+Imagine a user is searching for accommodations and sets a maximum price of $200. If they specify maxPrice="200", the constructed query will ensure that only accommodations priced at $200 or less are returned. However, due to the use of .toString(), the comparison may not behave as expected if the database field is stored as a number.

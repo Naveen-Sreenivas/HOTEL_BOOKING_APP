@@ -1,0 +1,56 @@
+
+useForm hook
+
+The useForm hook from the react-hook-form library is a powerful utility that provides a variety of methods and properties to manage form state, handle validation, and manage form submissions in React applications. When you call useForm, it returns an object containing several properties and methods, including handleSubmit.
+
+register
+
+The register method from useForm is used to connect your input elements to the React Hook Form methods. It registers the input and provides validation rules and other configurations.
+
+watch
+
+watch method is used to observe the current value of specific input fields and re-render the component when these values change. This is particularly useful for conditional rendering or validation logic that depends on the values of other fields in the form.That allows you to track the value of form inputs as they are updated. It can watch a single input field, multiple fields, or the entire form.
+
+formState: { errors } 
+       
+The formState: { errors } destructuring in the useForm hook from react-hook-form is used to access the errors object, 
+
+Validation Feedback:
+
+The errors object holds information about any validation errors for the form fields. Each key in this object corresponds to a field name, and the value is an object containing details about the validation error.
+Error Messaging:
+
+By accessing the errors object, you can display error messages next to the corresponding form fields. This helps users understand what they need to correct in order to successfully submit the form.
+Conditional Rendering:
+
+You can use the presence of an error in the errors object to conditionally render error messages or apply styles to indicate that a field has an error.
+
+Nested Destructuring: The correct and most common way to destructure nested properties directly.
+javascript
+
+const { formState: { errors } } = useForm();
+
+Separate Variable Assignment: An alternative way that involves separate steps to achieve the same result.
+javascript
+
+const formMethods = useForm();
+const errors = formMethods.formState.errors;
+
+handleSubmit
+
+handleSubmit plays a crucial role in managing form submissions and ensuring that data is validated against the rules defined by the developer before it is actually submitted.
+
+
+******************************************************************************************************************************************
+useMutation in React Query
+******************************************************************************************************************************************
+
+Purpose:
+
+useMutation is a hook provided by React Query specifically designed for managing asynchronous operations that modify data, typically through API calls like POST, PUT, DELETE, etc.
+It simplifies the process of triggering mutations (data modifications) and handling the associated states (such as loading, error, and success).
+Key Features:
+
+Data Mutation: Handles data mutation operations, encapsulating logic related to sending requests to update server-side data.
+Optimistic Updates: Provides mechanisms for optimistic updates, where the UI is updated optimistically before the mutation response is received from the server.
+Automatic Cache Management: Automatically manages cache updates based on the mutation result to keep data consistent across the application.

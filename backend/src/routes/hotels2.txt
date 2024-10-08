@@ -1,0 +1,5 @@
+router order
+
+the order in which the routes are defined. In Express, routes are matched in the order they are defined, so if a more generic route (e.g., /search) is defined before a more specific route (e.g., /:id), the generic route might be matched first, causing the specific route to be unreachable.
+
+By placing the specific route (/:id) before the generic route (/search), the router will correctly match the /search route only when the URL does not match the /:id pattern. This should resolve the issue you're encountering.

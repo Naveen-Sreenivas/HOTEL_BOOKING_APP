@@ -1,0 +1,28 @@
+
+interface Props {
+    children: React.ReactNode;
+}
+
+
+Interface Declaration:
+
+interface is a TypeScript keyword used to define a new interface.
+Props is the name of the interface. It is a convention to use Props as the name for interfaces that define the expected properties for React components, but you can name it anything you like.
+Interface Body:
+
+The body of the interface is enclosed in curly braces { }.
+Inside the body, you define the properties and their types.
+Property Definition:
+
+children: This is the name of the property. In the context of React components, children is a special prop that represents the content you pass between the opening and closing tags of a component.
+React.ReactNode: This is the type of the children property.
+React.ReactNode
+React.ReactNode is a type provided by the React library. It is a union type that encompasses all possible types that can be rendered by a React component. This includes:
+
+string: Text content.
+number: Numeric content.
+ReactElement: React elements.
+ReactFragment: A group of React elements.
+JSX.Element: Another way to describe React elements.
+null and undefined: Representing the absence of content.
+In summary, React.ReactNode is used to type the children prop because it covers all the valid types that can be rendered in a React component, providing a flexible and comprehensive type check.

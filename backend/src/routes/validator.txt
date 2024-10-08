@@ -1,0 +1,97 @@
+The express-validator library provides a comprehensive set of methods to validate and sanitize user input in an Express.js application. Here are some of the key methods available in express-validator:
+
+Validation Chain Methods
+Basic Validators
+.isString(): Checks if the value is a string.
+
+typescript
+check('field').isString();
+.isEmail(): Checks if the value is a valid email address.
+
+typescript
+check('email').isEmail();
+.isInt(): Checks if the value is an integer.
+
+typescript
+check('age').isInt();
+.isFloat(): Checks if the value is a float.
+
+typescript
+check('price').isFloat();
+.isBoolean(): Checks if the value is a boolean.
+
+typescript
+check('isActive').isBoolean();
+.isDate(): Checks if the value is a valid date.
+
+typescript
+check('dateOfBirth').isDate();
+String Validators
+.isLength({ min, max }): Checks if the string's length falls within a specified range.
+
+typescript
+check('password').isLength({ min: 6, max: 20 });
+.matches(pattern): Checks if the string matches a regular expression pattern.
+
+typescript
+check('username').matches(/^[a-zA-Z0-9_-]{3,15}$/);
+.isIn(array): Checks if the string is in an array of allowed values.
+
+typescript
+check('role').isIn(['admin', 'user', 'guest']);
+.isUUID(): Checks if the string is a valid UUID.
+
+typescript
+check('uuid').isUUID();
+Number Validators
+.isNumeric(): Checks if the value contains only numbers.
+
+typescript
+check('price').isNumeric();
+.isInt({ min, max }): Checks if the value is an integer within a range.
+
+typescript
+check('age').isInt({ min: 18, max: 65 });
+Custom Validators
+.custom(validator): Defines a custom validator function.
+
+typescript
+check('password').custom(value => {
+  if (!value.match(/[a-z]/) || !value.match(/[A-Z]/) || !value.match(/[0-9]/)) {
+    throw new Error('Password must contain at least one lowercase letter, one uppercase letter, and one number');
+  }
+  return true;
+});
+.customSanitizer(sanitizer): Defines a custom sanitizer function.
+
+typescript
+check('username').customSanitizer(value => value.trim().toLowerCase());
+Conditional Validators
+.if(condition): Applies validators only if a condition is met.
+typescript
+check('promoCode').if((value, { req }) => req.body.usePromoCode === true).isAlphanumeric();
+Error Message
+.withMessage(message): Customizes the error message for a validator.
+typescript
+check('email').isEmail().withMessage('Invalid email address');
+Sanitization Chain Methods
+.trim(): Trims whitespace from both ends of the string.
+
+typescript
+check('username').trim();
+.toLowerCase(): Converts the string to lowercase.
+
+typescript
+check('username').toLowerCase();
+.toUpperCase(): Converts the string to uppercase.
+
+typescript
+check('username').toUpperCase();
+.escape(): Escapes HTML entities.
+
+typescript
+check('comment').escape();
+.normalizeEmail(): Normalizes an email address.
+
+typescript
+check('email').normalizeEmail();

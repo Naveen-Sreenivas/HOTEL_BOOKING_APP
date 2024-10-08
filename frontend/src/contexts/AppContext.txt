@@ -1,0 +1,184 @@
+*****************************************************************************************************************************************
+Void Return Type: In TypeScript, functions that are annotated with void explicitly declare that they do not return any value. This is denoted by => void; in function type annotations.
+*****************************************************************************************************************************************
+Example:
+
+typescript
+Copy code
+function showMessage(message: string): void {
+    console.log(message); // Logs the message to the console
+    // No return statement here
+}
+
+******************************************************************************************************************************************
+const AppContext = React.createContext<AppContext | undefined>(undefined);
+******************************************************************************************************************************************
+
+React.createContext:
+
+React.createContext is a method provided by React that creates a new context object. Contexts in React are used to pass data through the component tree without having to pass props down manually at every level.
+AppContext | undefined:
+
+AppContext is a TypeScript type or interface that defines the structure of the context's value. In this case, it's defined as:
+
+typescript
+Copy code
+type AppContext = {
+  showToast: (toastMessage: ToastMessage) => void;
+};
+This type defines that the context value (AppContext) has a single function showToast that accepts a ToastMessage and returns void.
+
+| undefined allows the initial value of the context to be undefined. This means that when components initially access the context, before a provider is established higher in the tree, they won't receive a valid AppContext object. This is crucial for setting up the default value of the context.
+
+(undefined):
+
+This parameter is the default value of the context. It specifies what value the context will have when accessed by components that are not wrapped in a provider. Here, it's undefined, indicating that initially, the context doesn't provide any meaningful AppContext value until a provider is set up.
+
+******************************************************************************************************************************************
+const AppContextProvider = ({children}:{
+    children:React.ReactNode;
+}) =>{
+return(
+    <AppContext.Provider value={{showToast:()=> undefined}}>
+        {children}
+    </AppContext.Provider>
+)
+};
+******************************************************************************************************************************************
+
+
+const AppContextProvider = ({children}:{
+    children:React.ReactNode;
+})
+
+
+ very simple example illustrating how parameter destructuring works in TypeScript and ES6:
+
+typescript
+Copy code
+// Define a function that takes an object parameter
+const printPersonInfo = ({ name, age }: { name: string; age: number }) => {
+  console.log(`Name: ${name}, Age: ${age}`);
+};
+
+// Call the function with an object argument
+printPersonInfo({ name: "Alice", age: 30 });
+Explanation:
+Function Definition:
+
+printPersonInfo is a function that expects an object as its parameter.
+This object is specified to have name (a string) and age (a number) properties.
+Parameter Destructuring:
+
+{ name, age } within the function parameter list denotes that we are extracting name and age properties from the object passed to the function.
+TypeScript ensures that the object passed conforms to the specified structure ({ name: string; age: number }).
+
+Functional Component:
+
+const AppContextProvider = ...: This declares a functional component named AppContextProvider.
+Props Destructuring:
+
+({ children }: { children: React.ReactNode; }): This syntax uses destructuring in the function parameter to extract the children prop from the props object. It specifies that the children prop should be of type React.ReactNode, which allows any valid React node to be passed as children (e.g., components, elements, strings, etc.).
+Component Implementation:
+
+The function body:
+typescript
+Copy code
+return (
+  <AppContext.Provider value={{ showToast: () => undefined }}>
+    {children}
+  </AppContext.Provider>
+);
+AppContext.Provider: This is a special component provided by the AppContext created earlier using React.createContext. It allows components nested inside it to subscribe to changes in the context's value.
+
+value prop: This prop accepts an object that defines the context's value. In this case, it's { showToast: () => undefined }, indicating that the showToast function is available in the context with a placeholder implementation that returns undefined.
+
+{children}: This is a special prop in React components that contains the components or elements passed as children to AppContextProvider. By rendering {children} inside AppContext.Provider, any components nested within AppContextProvider can access the context provided by AppContext.
+
+
+******************************************************************************************************************************************
+ const {isError} = useQuery("validateToken",apiClient.validateToken,{
+    retry:false,
+  })
+******************************************************************************************************************************************
+The useQuery hook is used for fetching, caching, and updating server data in your React application. It takes the following parameters:
+
+Query Key: A unique key to identify the query ("validateToken" in this case).
+Query Function: The function that fetches the data (apiClient.validateToken).
+Query Options: Options to configure the query behavior.
+Detailed Explanation
+Query Key ("validateToken"):
+
+This is a unique identifier for the query. React Query uses this key to manage the query's cache and updates.
+Query Function (apiClient.validateToken):
+
+This is the function that performs the actual data fetching. It should return a promise. In this case, apiClient.validateToken is the function that validates the token by making an API request.
+Query Options:
+
+These options configure the query’s behavior. In your case, { retry: false } disables automatic retries if the query fails.
+
+Error Handling: You handle errors by checking the isError property and using the error object for more details.The isError property is not a random name but a built-in property provided by React Query's useQuery hook
+
+*****************************************************************************************************************************************
+useQuery Hook Return Properties
+When you use the useQuery hook, it returns an object with several properties to help you manage your data fetching logic. Some of the most commonly used properties include:
+
+data: The data returned from the query function if the request is successful.
+error: The error object if the request fails.
+isError: A boolean that is true if the query encountered an error.
+isLoading: A boolean that is true if the query is currently loading.
+isFetching: A boolean that is true if the query is currently fetching in the background.
+isSuccess: A boolean that is true if the query was successful.
+status: The status of the query ('idle' | 'loading' | 'error' | 'success').
+***************************************************************************************************************************************
+
+
+
+
+******************************************************************************************************************************************
+const useAppContext = () =>{
+    const context = useContext(AppContext);
+    return context as AppContext;
+}
+******************************************************************************************************************************************
+
+Function Declaration:
+
+const useAppContext = () => { ... }: This declares a function named useAppContext using arrow function syntax.
+useContext Hook:
+
+const context = useContext(AppContext);: This line uses the useContext hook from React to access the value provided by AppContext.Provider.
+AppContext here refers to the context object created using React.createContext.
+Type Assertion:
+
+return context as AppContext;: Since useContext returns a generic any type, and we know that our context value conforms to AppContext type (which typically includes functions and data specific to our application), we use type assertion (as AppContext) to cast context to the AppContext type.
+This provides TypeScript with the necessary information about the shape of the context value, enabling type safety and better code completion within IDEs.
+Explanation:
+Custom Hook: useAppContext is a custom React hook designed to encapsulate the logic for accessing and returning context values from AppContext.
+useContext Hook: It is used within useAppContext to retrieve and return the current context value provided by the nearest AppContext.Provider component in the React component tree.
+Type Assertion: TypeScript's as syntax (context as AppContext) assures TypeScript that context adheres to the AppContext type. This helps prevent type errors and enables TypeScript to provide accurate type checking and IntelliSense support.
+
+
+Type Assertion in TypeScript, using the as syntax (context as AppContext), tells TypeScript explicitly that you are sure that context follows the structure defined by the AppContext type. This is useful because TypeScript then ensures that you're using context correctly according to its expected shape, preventing potential type-related errors. It also enables TypeScript to offer accurate code suggestions and autocomplete features (IntelliSense) based on the properties and methods defined in AppContext. Essentially, it's a way to provide TypeScript with additional information about the types in your code, improving type safety and development experience.
+
+
+const useAppContext = () =>{
+    const context = useContext(AppContext);
+    return context as AppContext;
+}
+
+useContext provides a way to share values like state or functions between components without having to explicitly pass props through every level of the tree.
+This is useful for things like global settings, user authentication status, themes, etc.
+
+
+
+const useAppContext = () =>{
+    const context = useContext(AppContext);
+    return context as AppContext;
+}
+
+
+
+Global State Formation: AppContext is like a container for our global state. It can hold any data we want to share across multiple components.
+Provider: We use AppContext.Provider to specify what data (or state) we want to share. We wrap our component tree with this provider, so all nested components can access the data.
+useContext Hook: Inside any functional component, we call useContext(AppContext) to get the current value of the global state from the nearest provider. This way, the component can use the shared data directly.
